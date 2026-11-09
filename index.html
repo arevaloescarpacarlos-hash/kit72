@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Kit 72 h</title>
+<meta name="theme-color" content="#E9EEEC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1A22" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kit 72 h">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root{
+  --bg:#E9EEEC; --surface:#F7F9F8; --ink:#12222E; --muted:#51636E; --line:#C5D0CE;
+  --accent:#1F5F8B; --on-accent:#FFFFFF;
+  --ok:#2E7D5B; --on-ok:#FFFFFF; --warn:#9A6400; --on-warn:#FFFFFF; --bad:#B3382C; --on-bad:#FFFFFF;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Charter,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0F1A22; --surface:#17252F; --ink:#E6EEF0; --muted:#97A9B2; --line:#2B3E4A;
+    --accent:#6DB3E0; --on-accent:#08202F;
+    --ok:#5BC08F; --on-ok:#06261A; --warn:#E3A93A; --on-warn:#2B1C00; --bad:#EE7A6C; --on-bad:#2E0A05;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--sans);min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:640px;margin:0 auto;padding:0 18px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* cabecera */
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top) + 14px) 0 10px;border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{margin:0;font:600 25px/1.1 var(--serif);letter-spacing:-.01em}
+#sub{margin:3px 0 0;font-size:13px;color:var(--muted)}
+.iconbtn{flex:none;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-weight:600}
+
+/* contenido */
+main{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+.gauge{padding:18px 0 14px;border-bottom:1px solid var(--line)}
+.g-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.g-name{font-weight:600;font-size:15px}
+.g-num{font:600 46px/1 var(--serif);letter-spacing:-.02em}
+.g-num small{font:500 15px var(--sans);letter-spacing:0;color:var(--muted)}
+.ruler{position:relative;height:12px;margin:16px 0 26px;background:var(--line);border-radius:2px}
+.ruler .fill{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ok)}
+.ruler .fill.warn{background:var(--warn)} .ruler .fill.bad{background:var(--bad)}
+.ruler .tick{position:absolute;top:-5px;bottom:-5px;width:1px;background:var(--muted)}
+.ruler .tick.t3{width:3px;margin-left:-1px;background:var(--ink)}
+.ruler .tl{position:absolute;top:19px;transform:translateX(-50%);font-size:12px;color:var(--muted);white-space:nowrap}
+.ruler .tl.t3{color:var(--ink);font-weight:700}
+.g-note{margin:0;font-size:14px;color:var(--muted)}
+.cells{display:flex;gap:4px;margin:16px 0 12px}
+.cells i{flex:1;height:14px;border-radius:2px;background:var(--line)}
+.cells i.on{background:var(--accent)}
+.lines{margin:0 0 4px;padding:0 0 14px;list-style:none;border-bottom:1px solid var(--line)}
+.lines li{margin:3px 0;font-size:14px;color:var(--muted)}
+
+.alert{margin:18px 0 4px;padding:12px 14px;background:var(--surface);border-left:5px solid var(--warn)}
+.alert h2{margin:0 0 6px;font:600 15px var(--sans)}
+.alert ul{margin:0;padding:0;list-style:none}
+.alert li{margin:3px 0;font-size:14px}
+
+.weak{margin:16px 0 0;padding:0 0 16px;border-bottom:1px solid var(--line)}
+.weak .w-line{margin:0 0 10px;font-size:15px}
+.w-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px}
+.w-grid div{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+.w-grid span{display:block;font-size:13px;color:var(--muted)}
+.w-grid strong{font:600 22px/1.2 var(--serif)}
+.w-grid .w-min{border:2px solid var(--warn);padding:7px 9px}
+.weak .hint{margin-top:10px}
+.rev{margin:16px 0 0;padding:12px 14px;background:var(--surface);border-left:5px solid var(--accent)}
+.rev h2{margin:0 0 4px;font:600 15px var(--sans)}
+.rev p{margin:0 0 10px;font-size:14px}
+.search input{margin-top:0}
+.search{margin:8px 0 2px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 4px}
+.sec-head h2{margin:0;font:600 20px var(--serif)}
+.btn{min-height:44px;padding:9px 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.btn.danger{color:var(--bad);border-color:var(--bad);background:transparent}
+.empty{margin:14px 0;padding:14px;border:1px dashed var(--line);color:var(--muted);font-size:15px}
+
+.list{list-style:none;margin:0;padding:0}
+.list>li{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line)}
+.row{flex:1;min-width:0;display:flex;align-items:center;gap:12px;min-height:60px;padding:10px 0;text-align:left;background:none;border:0;cursor:pointer}
+.r-main{flex:1;min-width:0}
+.r-main strong{display:block;font-weight:600;overflow-wrap:anywhere}
+.r-sub{display:block;margin-top:1px;font-size:14px;color:var(--muted)}
+.r-sub.pending{font-style:italic}
+.chip{flex:none;padding:4px 10px;border-radius:999px;border:1px solid var(--line);font-size:13px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--ok);color:var(--on-ok);border-color:transparent}
+.chip.warn{background:var(--warn);color:var(--on-warn);border-color:transparent}
+.chip.bad{background:var(--bad);color:var(--on-bad);border-color:transparent}
+.price{flex:none;font-size:13px;color:var(--muted)}
+.chk{flex:none;display:grid;place-items:center;width:44px;height:44px;cursor:pointer}
+.chk input{width:26px;height:26px;margin:0;accent-color:var(--accent);cursor:pointer}
+
+.stock{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 0}
+.stock .s-name{display:block;margin-bottom:4px;font-size:14px;font-weight:600}
+.step{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
+.step button{flex:none;width:38px;min-height:44px;border:0;background:none;font-size:20px;cursor:pointer}
+.step input{flex:1;min-width:0;width:100%;border:0;border-left:1px solid var(--line);border-right:1px solid var(--line);background:none;text-align:center;font-size:17px;font-weight:600;-moz-appearance:textfield}
+.step input::-webkit-outer-spin-button,.step input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+/* navegación inferior */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.nav button{position:relative;flex:1;min-height:58px;padding:10px 8px;background:none;border:0;cursor:pointer;font-weight:600;color:var(--muted)}
+.nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 3px 0 var(--accent)}
+.badge{display:inline-block;min-width:20px;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--bad);color:var(--on-bad);font-size:12px;font-weight:700}
+.badge[hidden]{display:none}
+
+/* diálogos */
+dialog{width:100%;max-width:640px;max-height:92vh;margin:auto auto 0;padding:0;border:0;border-radius:16px 16px 0 0;background:var(--surface);color:var(--ink);overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.pad{padding:20px 20px calc(24px + env(safe-area-inset-bottom))}
+.pad h2{margin:0 0 6px;font:600 22px var(--serif)}
+.pad h3{margin:24px 0 4px;font:600 16px var(--sans)}
+.fld{display:block;margin:14px 0 0;font-size:14px;font-weight:600}
+.fld input,.fld select,.fld textarea{display:block;width:100%;min-height:46px;margin-top:5px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);font-size:16px;font-weight:400}
+.fld textarea{min-height:90px;font:13px/1.35 ui-monospace,Menlo,Consolas,monospace}
+.hint{margin:6px 0 0;font-size:13px;color:var(--muted);font-weight:400}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-top:10px}
+.seg label{position:relative;flex:1}
+.seg input{position:absolute;opacity:0;inset:0}
+.seg span{display:block;padding:11px;text-align:center;font-weight:600}
+.seg input:checked+span{background:var(--ink);color:var(--bg)}
+.seg input:focus-visible+span{outline:3px solid var(--accent);outline-offset:-4px}
+.calc{margin-top:10px;font-size:14px}
+.calc summary{cursor:pointer;color:var(--accent);font-weight:600;min-height:32px}
+.calc .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.checkline{display:flex;align-items:center;gap:12px;margin-top:18px;font-weight:600}
+.checkline input{width:26px;height:26px;accent-color:var(--accent)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.actions .grow{flex:1}
+.stack{display:grid;gap:10px;margin-top:10px}
+[hidden]{display:none!important}
+
+#toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:20;max-width:90%;padding:10px 16px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:14px;font-weight:600;text-align:center}
+.hbtns{flex:none;display:flex;gap:8px}
+.iconbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:transparent}
+
+/* modo apagón: negro puro, letra grande, sin adornos */
+html.apagon{color-scheme:dark;
+  --bg:#000000;--surface:#000000;--ink:#EDEDED;--muted:#B3B3B3;--line:#444444;
+  --accent:#F2B84B;--on-accent:#000000;--ok:#8FD19E;--on-ok:#000000;--warn:#F2B84B;--on-warn:#000000;--bad:#FF8A7A;--on-bad:#000000}
+html.apagon body{font-size:19px}
+html.apagon h1{font-size:24px;white-space:nowrap}
+html.apagon #sub{display:none}
+html.apagon .iconbtn{padding:0 10px}
+html.apagon .alert{border-left-color:var(--warn)}
+html.apagon .rev{border-left-color:var(--accent)}
+html.apagon .r-sub,html.apagon .g-note,html.apagon .lines li,html.apagon .alert li,html.apagon .rev p,html.apagon .stock .s-name,html.apagon .weak .w-line{font-size:17px}
+html.apagon .hint,html.apagon .weak .hint{display:none}
+html.apagon .g-num{font-size:54px}
+html.apagon .ruler .tl,html.apagon .chip,html.apagon .price,html.apagon .w-grid span{font-size:15px}
+html.apagon .btn,html.apagon .nav button,html.apagon .iconbtn{font-size:18px}
+html.apagon .row{min-height:68px}
+html.apagon .alert,html.apagon .rev{border:1px solid var(--line);border-left-width:6px}
+html.apagon .w-grid div,html.apagon .step,html.apagon dialog{border:1px solid var(--line)}
+html.apagon .w-grid .w-min{border:2px solid var(--warn)}
+html.apagon .top{border-bottom-color:var(--line)}
+@media (prefers-reduced-motion:no-preference){ .ruler .fill{transition:width .35s ease} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div>
+      <h1>Kit de 72 horas</h1>
+      <p id="sub"></p>
+    </div>
+    <div class="hbtns">
+      <button class="iconbtn" id="btnApagon" data-act="apagon" aria-pressed="false" aria-label="Modo apagón: negro y letra grande">Apagón</button>
+      <button class="iconbtn" data-act="settings" aria-label="Ajustes y copia de seguridad">Ajustes</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main" tabindex="-1"></main>
+<noscript><p class="wrap">Esta aplicación necesita JavaScript.</p></noscript>
+
+<nav class="nav" aria-label="Secciones">
+  <button data-act="tab" data-tab="comida" id="navComida">Comida<span class="badge" id="badge" hidden></span></button>
+  <button data-act="tab" data-tab="aparatos" id="navAparatos">Aparatos</button>
+  <button data-act="tab" data-tab="lista" id="navLista">Lista<span class="badge" id="badgeL" hidden></span></button>
+</nav>
+
+<dialog id="dlg" aria-labelledby="dlgTitle"></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(()=>{
+'use strict';
+
+/* ---------- utilidades ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf=(n,d=0)=>Number(n).toLocaleString('es-ES',{maximumFractionDigits:d,minimumFractionDigits:0,useGrouping:'always'});
+const eur=n=>Number(n).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+const pl=(n,a,b)=>n===1?a:b;
+const num=v=>{const n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:0;};
+const numOrNull=v=>{const t=String(v??'').trim();if(!t)return null;const n=parseFloat(t.replace(',','.'));return Number.isFinite(n)?n:null;};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());};
+const parseD=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?new Date(+m[1],+m[2]-1,+m[3]):null;};
+const daysLeft=s=>{const d=parseD(s);return d?Math.round((d-today())/86400000):null;};
+const monthYear=s=>{const d=parseD(s);return d?d.toLocaleDateString('es-ES',{month:'short',year:'numeric'}):'';};
+
+/* ---------- datos ---------- */
+const KEY='kit72.v1';
+const SEED=()=>[];
+const isoHoy=()=>{const t=today();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;};
+const DEFAULTS=()=>({v:1,tab:'comida',apagon:false,creado:isoHoy(),ultimaRevision:'',
+  settings:{personas:4,kcalDia:2000,litrosDia:3,movilMah:4500,eficiencia:70,avisoDias:7,minCocinaDia:30,cargasMovilDia:1,revisionDias:90},
+  comida:[],aparatos:SEED(),lista:[],stock:{AA:0,AAA:0,gas:0}});
+let storageOk=true;
+function load(){
+  const d=DEFAULTS();
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){const p=JSON.parse(raw);return normalize(p,d);}
+  }catch(e){storageOk=false;}
+  return d;
+}
+function normalize(p,d){
+  d=d||DEFAULTS();
+  if(!p||typeof p!=='object')return d;
+  Object.assign(d.settings,p.settings||{});
+  Object.assign(d.stock,p.stock||{});
+  if(Array.isArray(p.comida))d.comida=p.comida;
+  if(Array.isArray(p.aparatos))d.aparatos=p.aparatos;
+  if(Array.isArray(p.lista))d.lista=p.lista;
+  if(typeof p.creado==='string'&&p.creado)d.creado=p.creado;
+  if(typeof p.ultimaRevision==='string')d.ultimaRevision=p.ultimaRevision;
+  if(['comida','aparatos','lista'].includes(p.tab))d.tab=p.tab;
+  if(typeof p.apagon==='boolean')d.apagon=p.apagon;
+  return d;
+}
+let state=load();
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(state));}
+  catch(e){storageOk=false;toast('No se pudo guardar en este navegador. Haz una copia desde Ajustes.');}
+}
+
+/* ---------- cálculos ---------- */
+function calcComida(){
+  const s=state.settings;let kcal=0,litros=0,sinDato=0,caducados=0;
+  for(const it of state.comida){
+    const d=daysLeft(it.caduca);
+    if(d!==null&&d<0){caducados++;continue;}
+    if(it.tipo==='agua'){ if(it.litrosUd>0)litros+=it.cantidad*it.litrosUd; else sinDato++; }
+    else{ if(it.kcalUd>0)kcal+=it.cantidad*it.kcalUd; else sinDato++; }
+  }
+  const needK=(s.personas*s.kcalDia)||1, needL=(s.personas*s.litrosDia)||1;
+  return {kcal,litros,sinDato,caducados,
+    diasComida:kcal/needK, diasAgua:litros/needL,
+    faltaKcal:3*needK-kcal, faltaL:3*needL-litros};
+}
+function alertas(src){
+  const lim=state.settings.avisoDias,arr=[];
+  if(!src||src==='comida')state.comida.forEach(it=>arr.push({it,d:daysLeft(it.caduca)}));
+  if(!src||src==='lista')state.lista.filter(it=>it.tengo).forEach(it=>arr.push({it,d:daysLeft(it.caduca)}));
+  return arr.filter(x=>x.d!==null&&x.d<=lim).sort((a,b)=>a.d-b.d);
+}
+const plano=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const q={comida:'',aparatos:'',lista:''};
+const filtrar=(arr,tab)=>{const t=plano(q[tab]).trim();return t?arr.filter(x=>plano(x.nombre).includes(t)):arr;};
+function diasDesdeRevision(){
+  const ref=parseD(state.ultimaRevision||state.creado)||today();
+  return Math.round((today()-ref)/86400000);
+}
+function powerbanks(){
+  const s=state.settings;let mah=0;
+  for(const a of state.aparatos){ if(a.tengo&&a.energia==='powerbank'&&a.mah>0)mah+=a.cantidad*a.mah*s.eficiencia/100; }
+  return {mah,cargas:mah/(s.movilMah||1)};
+}
+function aparatoInfo(a){
+  const s=state.settings;
+  if(!a.tengo)return {t:'Pendiente de comprar',pending:true};
+  switch(a.energia){
+    case 'pilas':{
+      const st=state.stock[a.tipoPila]||0, per=a.pilasPorAparato||0;
+      if(!per)return {t:'Falta indicar cuántas pilas usa'};
+      const juegos=Math.floor(st/per);
+      if(!a.horasJuego)return {t:`Falta el dato de horas por juego. Con tus pilas salen ${juegos} ${pl(juegos,'juego','juegos')} de ${per} ${a.tipoPila}`};
+      return {t:`${nf(juegos*a.horasJuego,1)} h de uso con tus ${st} pilas ${a.tipoPila} (${juegos} ${pl(juegos,'juego','juegos')}), si son solo para este aparato`};
+    }
+    case 'bateria':{
+      if(!a.horasBateria)return {t:'Falta el dato de horas con la batería llena'};
+      let t=`${nf(a.horasBateria,1)} h con la batería llena`;
+      const pb=powerbanks();
+      if(a.mah>0&&pb.mah>0){
+        const rec=Math.floor(pb.mah/a.mah);
+        if(rec>0)t+=`. Con las powerbanks, unas ${rec} ${pl(rec,'recarga','recargas')} más (${nf(a.horasBateria*(1+rec),1)} h) si les dedicas toda su carga`;
+      }
+      return {t};
+    }
+    case 'powerbank':{
+      if(!(a.mah>0))return {t:'Falta la capacidad en mAh'};
+      const c=a.cantidad*a.mah*s.eficiencia/100/(s.movilMah||1);
+      return {t:`Unas ${nf(c,1)} cargas de móvil (${a.cantidad} × ${nf(a.mah)} mAh al ${s.eficiencia} %)`};
+    }
+    case 'gas':{
+      const st=state.stock.gas||0;
+      if(!(a.minGas>0))return {t:'Falta cuántos minutos de llama da un cartucho'};
+      return {t:`${nf(st*a.minGas)} min de llama con tus ${st} ${pl(st,'cartucho','cartuchos')}`};
+    }
+    default:return {t:'Marcado como comprado'};
+  }
+}
+
+/* ---------- vistas ---------- */
+function gauge(name,days,fillClassDays,note){
+  const max=Math.max(4,Math.ceil(days));
+  const step=max>8?2:1;
+  let ticks='';
+  for(let d=1;d<=max;d++){
+    if(d===3||d%step===0){
+      const left=(d/max*100).toFixed(2);
+      ticks+=`<i class="tick${d===3?' t3':''}" style="left:${left}%"></i><span class="tl${d===3?' t3':''}" style="left:${left}%">${d===3?'72 h':d}</span>`;
+    }
+  }
+  const cls=fillClassDays<1?'bad':fillClassDays<3?'warn':'';
+  const w=Math.min(100,days/max*100).toFixed(1);
+  return `<div class="gauge">
+    <div class="g-head"><span class="g-name">${name}</span><span class="g-num">${nf(days,1)} <small>${pl(Number(nf(days,1).replace(',','.')),'día','días')}</small></span></div>
+    <div class="ruler" role="img" aria-label="${name}: ${nf(days,1)} días de autonomía, objetivo 3 días"><span class="fill ${cls}" style="width:${w}%"></span>${ticks}</div>
+    <p class="g-note">${note}</p></div>`;
+}
+function chipFor(d){
+  const lim=state.settings.avisoDias;
+  if(d===null)return '<span class="chip">Sin fecha</span>';
+  if(d<0)return `<span class="chip bad">Caducada hace ${-d} ${pl(-d,'día','días')}</span>`;
+  if(d===0)return '<span class="chip bad">Caduca hoy</span>';
+  if(d<=lim)return `<span class="chip warn">Caduca en ${d} ${pl(d,'día','días')}</span>`;
+  if(d<=60)return `<span class="chip">En ${d} días</span>`;
+  return '';
+}
+function chipCad(c){
+  const d=daysLeft(c);let chip=chipFor(d);
+  if(!chip&&d!==null)chip=`<span class="chip">${esc(monthYear(c))}</span>`;
+  return chip;
+}
+const searchBox=(tab,n)=>n>=5?`<label class="fld search"><span class="sr">Buscar</span><input type="search" data-act="search" placeholder="Buscar por nombre" value="${esc(q[tab])}" autocomplete="off"></label>`:'';
+function revBanner(){
+  if(!(state.comida.length+state.aparatos.length+state.lista.length))return '';
+  const lim=state.settings.revisionDias,n=diasDesdeRevision();
+  if(n<lim)return '';
+  const t=state.ultimaRevision?`Han pasado ${n} días desde la última revisión.`:`Llevas ${n} días con el kit sin revisarlo.`;
+  return `<section class="rev" role="status"><h2>Toca revisar el kit</h2><p>${t} Prueba la radio y las linternas, recarga powerbanks y aparatos, mira las caducidades y rota la comida.</p><button class="btn" data-act="revHecha">Revisión hecha hoy</button></section>`;
+}
+function resumen(){
+  const s=state.settings,c=calcComida(),pb=powerbanks(),it=[];
+  if(c.kcal>0)it.push({n:'Comida',d:c.diasComida});
+  if(c.litros>0)it.push({n:'Agua',d:c.diasAgua});
+  const gas=state.aparatos.find(a=>a.tengo&&a.energia==='gas'&&a.minGas>0);
+  if(gas)it.push({n:'Cocina',d:gas.minGas*(state.stock.gas||0)/(s.minCocinaDia||1)});
+  if(pb.mah>0)it.push({n:'Móviles',d:pb.cargas/((s.personas*s.cargasMovilDia)||1)});
+  if(it.length<2)return '';
+  const w=it.reduce((a,b)=>b.d<a.d?b:a);
+  const dn=Number(nf(w.d,1).replace(',','.'));
+  return `<section class="weak" aria-label="Lo primero que se acaba"><p class="w-line">Lo primero que se acaba: <strong>${w.n}, ${nf(w.d,1)} ${pl(dn,'día','días')}</strong></p>
+    <div class="w-grid">${it.map(i=>`<div class="${i===w?'w-min':''}"><span>${i.n}</span><strong>${nf(i.d,1)}</strong></div>`).join('')}</div>
+    <p class="hint">Valores en días. Cocina cuenta ${nf(s.minCocinaDia)} min al día y móviles ${nf(s.cargasMovilDia,1)} ${pl(s.cargasMovilDia,'carga','cargas')} por persona y día; los dos se cambian en Ajustes.</p></section>`;
+}
+function listComida(){
+  const all=state.comida;
+  const items=[...filtrar(all,'comida')].sort((a,b)=>{
+    const da=daysLeft(a.caduca),db=daysLeft(b.caduca);
+    if(da===null&&db===null)return a.nombre.localeCompare(b.nombre,'es');
+    if(da===null)return 1; if(db===null)return -1; return da-db;});
+  if(!all.length)return '<p class="empty">Aún no has añadido nada. Pulsa Añadir comida y empieza por lo que ya tienes en casa: una línea por producto y fecha de caducidad.</p>';
+  if(!items.length)return '<p class="empty">Nada coincide con la búsqueda.</p>';
+  return `<ul class="list">${items.map(it=>{
+    let det;
+    if(it.tipo==='agua')det=it.litrosUd>0?`${nf(it.cantidad,2)} × ${nf(it.litrosUd,2)} L = ${nf(it.cantidad*it.litrosUd,1)} L`:'Sin litros por unidad';
+    else det=it.kcalUd>0?`${nf(it.cantidad,2)} × ${nf(it.kcalUd)} kcal = ${nf(it.cantidad*it.kcalUd)} kcal`:'Sin kcal por unidad';
+    return `<li><button class="row" data-act="editComida" data-id="${esc(it.id)}"><span class="r-main"><strong>${esc(it.nombre)}</strong><span class="r-sub">${det}</span></span>${chipCad(it.caduca)}</button></li>`;
+  }).join('')}</ul>`;
+}
+function listAparatos(){
+  const all=state.aparatos,items=filtrar(all,'aparatos');
+  if(!all.length)return '<p class="empty">Aún no has añadido ningún aparato. Pulsa Añadir aparato y apunta la radio, las linternas, las powerbanks y lo demás.</p>';
+  if(!items.length)return '<p class="empty">Nada coincide con la búsqueda.</p>';
+  return `<ul class="list">${items.map(a=>{
+    const info=aparatoInfo(a);
+    const price=a.precio>0?`<span class="price">${eur(a.precio*a.cantidad)}</span>`:'';
+    return `<li><label class="chk"><input type="checkbox" data-act="tengo" data-id="${esc(a.id)}" ${a.tengo?'checked':''} aria-label="Lo tengo: ${esc(a.nombre)}"></label>
+      <button class="row" data-act="editAparato" data-id="${esc(a.id)}"><span class="r-main"><strong>${esc(a.nombre)}${a.cantidad>1?` × ${nf(a.cantidad)}`:''}</strong><span class="r-sub${info.pending?' pending':''}">${esc(info.t)}</span></span>${price}</button></li>`;
+  }).join('')}</ul>`;
+}
+function listLista(){
+  const all=state.lista,items=filtrar(all,'lista');
+  if(!all.length)return '<p class="empty">Aún no has añadido nada. Ideas para empezar: copias del DNI, recetas médicas, efectivo, llaves de repuesto, contactos apuntados en papel y los medicamentos de uso habitual con su caducidad.</p>';
+  if(!items.length)return '<p class="empty">Nada coincide con la búsqueda.</p>';
+  return `<ul class="list">${items.map(it=>`<li><label class="chk"><input type="checkbox" data-act="tengoL" data-id="${esc(it.id)}" ${it.tengo?'checked':''} aria-label="Lo tengo: ${esc(it.nombre)}"></label>
+    <button class="row" data-act="editLista" data-id="${esc(it.id)}"><span class="r-main"><strong>${esc(it.nombre)}</strong></span>${it.tengo&&it.caduca?chipCad(it.caduca):''}</button></li>`).join('')}</ul>`;
+}
+function viewLista(){
+  const total=state.lista.length,got=state.lista.filter(a=>a.tengo).length;
+  const cells=state.lista.map(a=>`<i class="${a.tengo?'on':''}"></i>`).join('');
+  const al=alertas('lista');
+  const alHtml=al.length?`<section class="alert" role="status"><h2>Revisa estas caducidades</h2><ul>${
+    al.map(({it,d})=>`<li><strong>${esc(it.nombre)}</strong>: ${d<0?`caducó hace ${-d} ${pl(-d,'día','días')}`:d===0?'caduca hoy':`caduca en ${d} ${pl(d,'día','días')}`}</li>`).join('')}</ul></section>`:'';
+  return `${revBanner()}<section aria-label="Resumen de la lista"><div class="gauge" style="border-bottom:0">
+      <div class="g-head"><span class="g-name">Listos</span><span class="g-num">${got} <small>de ${total}</small></span></div>
+      <div class="cells" role="img" aria-label="${got} de ${total} listos">${cells}</div></div></section>
+    ${alHtml}
+    <div class="sec-head"><h2>Papeles, dinero y medicinas</h2><button class="btn primary" data-act="addLista">Añadir</button></div>
+    ${searchBox('lista',total)}
+    <div id="listWrap">${listLista()}</div>`;
+}
+function viewComida(){
+  const s=state.settings,c=calcComida();
+  const noteK=c.kcal===0?'Añade comida para ver cuántos días cubres.'
+    :c.faltaKcal>0?`Te faltan ${nf(c.faltaKcal)} kcal para 72 h.`:`Cubres 72 h con ${nf(-c.faltaKcal)} kcal de margen.`;
+  const noteL=c.litros===0?'Añade agua para ver cuántos días cubres.'
+    :c.faltaL>0?`Te faltan ${nf(c.faltaL,1)} L para 72 h.`:`Cubres 72 h con ${nf(-c.faltaL,1)} L de margen.`;
+  let extra='';
+  if(c.sinDato)extra+=`<li>${c.sinDato} ${pl(c.sinDato,'línea sin','líneas sin')} kcal o litros: no cuenta${c.sinDato>1?'n':''} en el cálculo.</li>`;
+  if(c.caducados)extra+=`<li>${c.caducados} ${pl(c.caducados,'línea caducada','líneas caducadas')}: no cuenta${c.caducados>1?'n':''} en el cálculo.</li>`;
+  const al=alertas('comida');
+  const alHtml=al.length?`<section class="alert" role="status"><h2>Revisa estas caducidades</h2><ul>${
+    al.map(({it,d})=>`<li><strong>${esc(it.nombre)}</strong>: ${d<0?`caducó hace ${-d} ${pl(-d,'día','días')}`:d===0?'caduca hoy':`caduca en ${d} ${pl(d,'día','días')}`}</li>`).join('')
+  }</ul></section>`:'';
+  return `${revBanner()}${resumen()}<section aria-label="Autonomía">${gauge('Comida',c.diasComida,c.diasComida,noteK)}${gauge('Agua',c.diasAgua,c.diasAgua,noteL)}
+    ${extra?`<ul class="lines">${extra}</ul>`:''}</section>
+    ${alHtml}
+    <div class="sec-head"><h2>Lo que tienes</h2><button class="btn primary" data-act="addComida">Añadir comida</button></div>
+    ${searchBox('comida',state.comida.length)}
+    <div id="listWrap">${listComida()}</div>`;
+}
+function viewAparatos(){
+  const total=state.aparatos.length,got=state.aparatos.filter(a=>a.tengo).length;
+  const prev=state.aparatos.reduce((t,a)=>t+(a.precio||0)*a.cantidad,0);
+  const gast=state.aparatos.filter(a=>a.tengo).reduce((t,a)=>t+(a.precio||0)*a.cantidad,0);
+  const pb=powerbanks();
+  const cells=state.aparatos.map(a=>`<i class="${a.tengo?'on':''}"></i>`).join('');
+  const lines=[];
+  if(prev>0)lines.push(`Gastado ${eur(gast)} de ${eur(prev)} previstos.`);
+  lines.push(pb.mah>0?`Powerbanks: unas ${nf(pb.cargas,1)} cargas de móvil (${nf(pb.mah)} mAh útiles).`:'Powerbanks: ninguna marcada como comprada.');
+  const st=state.stock;
+  const stepper=(key,label)=>`<div><span class="s-name">${label}</span><div class="step">
+    <button data-act="step" data-key="${key}" data-d="-1" aria-label="Quitar uno de ${label}">−</button>
+    <input type="number" inputmode="numeric" min="0" step="1" value="${st[key]||0}" data-act="stock" data-key="${key}" aria-label="${label}">
+    <button data-act="step" data-key="${key}" data-d="1" aria-label="Añadir uno de ${label}">+</button></div></div>`;
+  return `${revBanner()}${resumen()}<section aria-label="Resumen de aparatos"><div class="gauge" style="border-bottom:0">
+      <div class="g-head"><span class="g-name">Comprados</span><span class="g-num">${got} <small>de ${total}</small></span></div>
+      <div class="cells" role="img" aria-label="${got} de ${total} aparatos comprados">${cells}</div></div>
+      <ul class="lines">${lines.map(l=>`<li>${l}</li>`).join('')}</ul></section>
+    <div class="sec-head"><h2>Pilas y gas</h2></div>
+    <div class="stock">${stepper('AA','Pilas AA')}${stepper('AAA','Pilas AAA')}${stepper('gas','Cartuchos')}</div>
+    <div class="sec-head"><h2>Aparatos</h2><button class="btn primary" data-act="addAparato">Añadir aparato</button></div>
+    ${searchBox('aparatos',total)}
+    <div id="listWrap">${listAparatos()}</div>`;
+}
+function aplicarApagon(){
+  const on=!!state.apagon;
+  document.documentElement.classList.toggle('apagon',on);
+  const b=$('#btnApagon'); if(b)b.setAttribute('aria-pressed',on?'true':'false');
+  document.querySelectorAll('meta[name=theme-color]').forEach(m=>{
+    if(!m.dataset.o)m.dataset.o=m.getAttribute('content');
+    m.setAttribute('content',on?'#000000':m.dataset.o);
+  });
+}
+function render(){
+  try{
+    aplicarApagon();
+    const s=state.settings;
+    $('#sub').textContent=`${s.personas} ${pl(s.personas,'persona','personas')}, ${nf(s.kcalDia)} kcal y ${nf(s.litrosDia,1)} L al día por persona`;
+    $('#main').innerHTML=state.tab==='comida'?viewComida():state.tab==='aparatos'?viewAparatos():viewLista();
+    $('#navComida').setAttribute('aria-current',state.tab==='comida'?'page':'false');
+    $('#navAparatos').setAttribute('aria-current',state.tab==='aparatos'?'page':'false');
+    $('#navLista').setAttribute('aria-current',state.tab==='lista'?'page':'false');
+    for(const [src,id] of [['comida','#badge'],['lista','#badgeL']]){
+      const n=alertas(src).length,b=$(id);b.hidden=!n;b.textContent=n;
+    }
+  }catch(e){
+    $('#main').innerHTML='<p class="empty">Algo ha fallado al mostrar los datos. Abre Ajustes y haz una copia antes de borrar nada.</p>';
+    console.error(e);
+  }
+}
+
+/* ---------- diálogos y formularios ---------- */
+const dlg=$('#dlg');
+function openDlg(html){dlg.innerHTML=`<div class="pad">${html}</div>`;if(!dlg.open)dlg.showModal();toggleGroups();}
+function closeDlg(){if(dlg.open)dlg.close();}
+function toggleGroups(){
+  const f=dlg.querySelector('form'); if(!f)return;
+  const sel=f.elements.tipo?f.elements.tipo.value:(f.elements.energia?f.elements.energia.value:'');
+  f.querySelectorAll('[data-show]').forEach(el=>{el.hidden=!el.dataset.show.split(' ').includes(sel);});
+}
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},3200);}
+const val=v=>v===null||v===undefined?'':String(v).replace('.',',');
+
+function formComida(id){
+  const it=id?state.comida.find(x=>x.id===id):null;
+  const tipo=it?it.tipo:'comida';
+  openDlg(`<form id="fComida" data-id="${esc(id||'')}">
+    <h2 id="dlgTitle">${it?'Editar':'Añadir'} alimento</h2>
+    <div class="seg" role="radiogroup" aria-label="Tipo">
+      <label><input type="radio" name="tipo" value="comida" ${tipo==='comida'?'checked':''}><span>Comida</span></label>
+      <label><input type="radio" name="tipo" value="agua" ${tipo==='agua'?'checked':''}><span>Agua</span></label>
+    </div>
+    <label class="fld">Nombre<input name="nombre" required autocomplete="off" placeholder="Atún en aceite, lata de 80 g" value="${esc(it?it.nombre:'')}"></label>
+    <label class="fld">Cantidad<input name="cantidad" inputmode="decimal" required value="${val(it?it.cantidad:1)}"></label>
+    <div data-show="comida">
+      <label class="fld">kcal por unidad<input name="kcalUd" inputmode="decimal" placeholder="Ej.: 150" value="${val(it?it.kcalUd:null)}"></label>
+      <details class="calc"><summary>Solo tengo las kcal por 100 g</summary>
+        <div class="two"><label class="fld">kcal por 100 g<input id="k100" inputmode="decimal"></label>
+        <label class="fld">Gramos por unidad<input id="gUd" inputmode="decimal"></label></div>
+        <div class="actions"><button type="button" class="btn" data-act="calc">Calcular kcal por unidad</button></div></details>
+    </div>
+    <div data-show="agua" hidden>
+      <label class="fld">Litros por unidad<input name="litrosUd" inputmode="decimal" placeholder="Ej.: 1,5" value="${val(it?it.litrosUd:null)}"></label>
+    </div>
+    <label class="fld">Caducidad o consumo preferente<input type="date" name="caduca" value="${esc(it?it.caduca:'')}"></label>
+    <p class="hint">Si compras el mismo producto con fechas distintas, crea una línea por fecha.</p>
+    <div class="actions">
+      ${it?'<button type="button" class="btn danger" data-act="delComida">Eliminar</button>':''}
+      <span class="grow"></span>
+      <button type="button" class="btn" data-act="closeDlg">Cancelar</button>
+      <button type="submit" class="btn primary">Guardar</button>
+    </div></form>`);
+}
+function formAparato(id){
+  const a=id?state.aparatos.find(x=>x.id===id):null;
+  const en=a?a.energia:'pilas';
+  const opt=(v,t)=>`<option value="${v}" ${en===v?'selected':''}>${t}</option>`;
+  const tp=a&&a.tipoPila?a.tipoPila:'AAA';
+  openDlg(`<form id="fAparato" data-id="${esc(id||'')}">
+    <h2 id="dlgTitle">${a?'Editar':'Añadir'} aparato</h2>
+    <label class="fld">Nombre<input name="nombre" required autocomplete="off" value="${esc(a?a.nombre:'')}"></label>
+    <label class="fld">Cantidad<input name="cantidad" inputmode="decimal" required value="${val(a?a.cantidad:1)}"></label>
+    <label class="fld">Cómo se alimenta
+      <select name="energia">${opt('pilas','Pilas')}${opt('bateria','Batería recargable')}${opt('powerbank','Powerbank')}${opt('gas','Gas (cartuchos)')}${opt('otro','Sin energía u otro')}</select></label>
+    <div data-show="pilas">
+      <label class="fld">Tipo de pila<select name="tipoPila"><option ${tp==='AAA'?'selected':''}>AAA</option><option ${tp==='AA'?'selected':''}>AA</option></select></label>
+      <label class="fld">Pilas que usa cada aparato<input name="pilasPorAparato" inputmode="numeric" value="${val(a?a.pilasPorAparato:null)}"></label>
+      <label class="fld">Horas de uso con un juego de pilas<input name="horasJuego" inputmode="decimal" placeholder="Mira la ficha del fabricante" value="${val(a?a.horasJuego:null)}"></label>
+    </div>
+    <div data-show="bateria">
+      <label class="fld">Horas de uso con la batería llena<input name="horasBateria" inputmode="decimal" placeholder="Mira la ficha del fabricante" value="${val(a?a.horasBateria:null)}"></label>
+      <label class="fld">Capacidad de su batería en mAh (opcional)<input name="mahBat" inputmode="numeric" value="${val(a&&a.energia==='bateria'?a.mah:null)}"></label>
+      <p class="hint">Con la capacidad, la app calcula cuántas recargas te dan las powerbanks.</p>
+    </div>
+    <div data-show="powerbank">
+      <label class="fld">Capacidad en mAh<input name="mahPb" inputmode="numeric" value="${val(a&&a.energia==='powerbank'?a.mah:null)}"></label>
+    </div>
+    <div data-show="gas">
+      <label class="fld">Minutos de llama por cartucho<input name="minGas" inputmode="decimal" placeholder="Mira la ficha del fabricante" value="${val(a?a.minGas:null)}"></label>
+    </div>
+    <label class="fld">Precio por unidad en euros (opcional)<input name="precio" inputmode="decimal" value="${val(a?a.precio:null)}"></label>
+    <label class="checkline"><input type="checkbox" name="tengo" ${a&&a.tengo?'checked':''}>Ya lo tengo</label>
+    <div class="actions">
+      ${a?'<button type="button" class="btn danger" data-act="delAparato">Eliminar</button>':''}
+      <span class="grow"></span>
+      <button type="button" class="btn" data-act="closeDlg">Cancelar</button>
+      <button type="submit" class="btn primary">Guardar</button>
+    </div></form>`);
+}
+function formLista(id){
+  const it=id?state.lista.find(x=>x.id===id):null;
+  openDlg(`<form id="fLista" data-id="${esc(id||'')}">
+    <h2 id="dlgTitle">${it?'Editar':'Añadir'} a la lista</h2>
+    <label class="fld">Nombre<input name="nombre" required autocomplete="off" placeholder="Copia del DNI, efectivo, medicamento..." value="${esc(it?it.nombre:'')}"></label>
+    <label class="fld">Caducidad (opcional)<input type="date" name="caduca" value="${esc(it?it.caduca||'':'')}"></label>
+    <p class="hint">Si lo rellenas y marcas que lo tienes, la app te avisa antes de que caduque.</p>
+    <label class="checkline"><input type="checkbox" name="tengo" ${it&&it.tengo?'checked':''}>Ya lo tengo</label>
+    <div class="actions">
+      ${it?'<button type="button" class="btn danger" data-act="delLista">Eliminar</button>':''}
+      <span class="grow"></span>
+      <button type="button" class="btn" data-act="closeDlg">Cancelar</button>
+      <button type="submit" class="btn primary">Guardar</button>
+    </div></form>`);
+}
+function formAjustes(){
+  const s=state.settings;
+  openDlg(`<form id="fSet">
+    <h2 id="dlgTitle">Ajustes</h2>
+    <label class="fld">Personas<input name="personas" inputmode="numeric" value="${val(s.personas)}"></label>
+    <label class="fld">kcal por persona y día<input name="kcalDia" inputmode="numeric" value="${val(s.kcalDia)}"></label>
+    <p class="hint">2.000 es una referencia habitual para un adulto. Ajústalo a tu caso.</p>
+    <label class="fld">Litros de agua por persona y día<input name="litrosDia" inputmode="decimal" value="${val(s.litrosDia)}"></label>
+    <p class="hint">Cuenta beber, cocinar y un mínimo de aseo.</p>
+    <label class="fld">Batería de un móvil, en mAh<input name="movilMah" inputmode="numeric" value="${val(s.movilMah)}"></label>
+    <label class="fld">Rendimiento de las powerbanks, en %<input name="eficiencia" inputmode="numeric" value="${val(s.eficiencia)}"></label>
+    <p class="hint">Parte de la carga se pierde al transferirla. 70 % es una estimación prudente.</p>
+    <label class="fld">Avisar con estos días de antelación<input name="avisoDias" inputmode="numeric" value="${val(s.avisoDias)}"></label>
+    <label class="fld">Minutos de cocina al día<input name="minCocinaDia" inputmode="numeric" value="${val(s.minCocinaDia)}"></label>
+    <p class="hint">Sirve para calcular cuántos días te dura el gas. Es una estimación: ajústala a cómo vayas a cocinar.</p>
+    <label class="fld">Cargas de móvil por persona y día<input name="cargasMovilDia" inputmode="decimal" value="${val(s.cargasMovilDia)}"></label>
+    <label class="fld">Revisar el kit cada tantos días<input name="revisionDias" inputmode="numeric" value="${val(s.revisionDias)}"></label>
+    <div class="actions"><span class="grow"></span><button type="button" class="btn" data-act="closeDlg">Cancelar</button><button type="submit" class="btn primary">Guardar ajustes</button></div>
+
+    <h3>Revisión periódica</h3>
+    <p class="hint">${state.ultimaRevision?`Última revisión: ${esc(parseD(state.ultimaRevision).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}))}.`:'Aún no has marcado ninguna revisión.'} Cuando pase el plazo, la app te lo recuerda al abrirla.</p>
+    <div class="stack"><button type="button" class="btn" data-act="revHecha">Marcar revisión hecha hoy</button></div>
+    <label class="fld">Primera revisión en el calendario<input type="date" id="revStart" value="${esc(isoHoy())}"></label>
+    <div class="stack"><button type="button" class="btn" data-act="revIcs">Exportar revisiones repetidas al calendario</button></div>
+    <p class="hint">Crea un evento que se repite cada ${Math.max(1,Math.round(s.revisionDias/30))} ${pl(Math.max(1,Math.round(s.revisionDias/30)),'mes','meses')}, con aviso a las 9:00.</p>
+
+    <h3>Avisos de caducidad en el calendario</h3>
+    <p class="hint">Dentro de la app, las caducidades próximas salen arriba y en la pestaña Comida. Para que el móvil te avise aunque no abras la app, exporta un archivo de calendario con un evento por cada fecha y una alerta con antelación. Si lo importas dos veces, el calendario puede duplicar los eventos.</p>
+    <div class="stack"><button type="button" class="btn" data-act="ics">Exportar caducidades al calendario</button></div>
+
+    <h3>Copia de seguridad</h3>
+    <p class="hint">Los datos viven solo en este móvil y navegador. Si limpias los datos del navegador o cambias de teléfono, se pierden sin copia.</p>
+    <div class="stack">
+      <button type="button" class="btn" data-act="exportFile">Guardar copia en un archivo</button>
+      <button type="button" class="btn" data-act="exportText">Copiar copia como texto</button>
+    </div>
+    <label class="fld">Importar copia: pega el texto aquí<textarea id="impText" spellcheck="false"></textarea></label>
+    <div class="stack"><button type="button" class="btn" data-act="importText">Importar el texto pegado</button>
+    <label class="btn" style="text-align:center">Importar desde un archivo<input id="impFile" type="file" accept="application/json,.json" hidden></label></div>
+
+    <h3>Instalar en el móvil</h3>
+    <p class="hint">En iPhone, abre esta página en Safari, pulsa Compartir y Añadir a pantalla de inicio. En Android, abre el menú de Chrome y pulsa Instalar aplicación. Ábrela una vez con conexión para que después funcione sin internet.</p>
+
+    <h3>Borrar todo</h3>
+    <div class="stack"><button type="button" class="btn danger" data-act="wipe">Borrar todos los datos</button></div>
+  </form>`);
+}
+
+/* ---------- copia, importación y calendario ---------- */
+function backupJson(){return JSON.stringify({app:'kit72',v:1,exportado:new Date().toISOString(),data:state},null,1);}
+async function saveFile(name,text,type){
+  const file=new File([text],name,{type});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:name});return;}catch(e){if(e&&e.name==='AbortError')return;}
+  }
+  const url=URL.createObjectURL(file),a=document.createElement('a');
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+}
+function importData(text){
+  let p;
+  try{p=JSON.parse(text);}catch(e){toast('El texto no es una copia válida.');return;}
+  const data=p&&p.app==='kit72'?p.data:null;
+  if(!data||!Array.isArray(data.comida)||!Array.isArray(data.aparatos)){toast('El texto no es una copia de esta app.');return;}
+  if(!confirm('Esto sustituye lo que tienes ahora por la copia. ¿Continuar?'))return;
+  state=normalize(data,DEFAULTS());save();closeDlg();render();toast('Copia importada.');
+}
+const icsEsc=t=>String(t).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');
+const fold=l=>{const out=[];while(l.length>60){out.push(l.slice(0,60));l=' '+l.slice(60);}out.push(l);return out.join('\r\n');};
+function buildIcs(){
+  const lim=Math.max(1,state.settings.avisoDias||7);
+  const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Kit72//ES','CALSCALE:GREGORIAN'];
+  let n=0;
+  const fuentes=[...state.comida,...state.lista.filter(x=>x.tengo)];
+  for(const it of fuentes){
+    const d=parseD(it.caduca); if(!d)continue;
+    const next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);
+    const f=x=>`${x.getFullYear()}${String(x.getMonth()+1).padStart(2,'0')}${String(x.getDate()).padStart(2,'0')}`;
+    const q=it.cantidad?`${nf(it.cantidad,2)} ${pl(it.cantidad,'unidad','unidades')}`:'';
+    L.push('BEGIN:VEVENT',`UID:${it.id}-${f(d)}@kit72`,`DTSTAMP:${stamp}`,
+      `DTSTART;VALUE=DATE:${f(d)}`,`DTEND;VALUE=DATE:${f(next)}`,
+      `SUMMARY:${icsEsc('Caduca: '+it.nombre)}`,
+      `DESCRIPTION:${icsEsc(`Kit de 72 horas: ${it.nombre}${q?` (${q})`:''}. Úsalo o repónlo.`)}`,
+      'BEGIN:VALARM','ACTION:DISPLAY',`DESCRIPTION:${icsEsc('Caduca en '+lim+' '+pl(lim,'día','días')+': '+it.nombre)}`,
+      `TRIGGER:-P${lim-1}DT15H`,'END:VALARM','END:VEVENT');
+    n++;
+  }
+  L.push('END:VCALENDAR');
+  return {text:L.map(fold).join('\r\n')+'\r\n',n};
+}
+
+function buildRevIcs(startIso){
+  const d=parseD(startIso)||today();
+  const next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);
+  const f=x=>`${x.getFullYear()}${String(x.getMonth()+1).padStart(2,'0')}${String(x.getDate()).padStart(2,'0')}`;
+  const meses=Math.max(1,Math.round((state.settings.revisionDias||90)/30));
+  const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const desc='Prueba la radio y las linternas. Recarga powerbanks y aparatos. Mira las caducidades y rota la comida. Repasa la lista de papeles y medicinas.';
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Kit72//ES','CALSCALE:GREGORIAN','BEGIN:VEVENT',
+    `UID:revision-${f(d)}@kit72`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${f(d)}`,`DTEND;VALUE=DATE:${f(next)}`,
+    `RRULE:FREQ=MONTHLY;INTERVAL=${meses}`,'SUMMARY:Revisar el kit de 72 h',`DESCRIPTION:${icsEsc(desc)}`,
+    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Revisar el kit de 72 h','TRIGGER:PT9H','END:VALARM','END:VEVENT','END:VCALENDAR'];
+  return L.map(fold).join('\r\n')+'\r\n';
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]'); if(!t)return;
+  const act=t.dataset.act,id=t.dataset.id;
+  switch(act){
+    case 'tab':state.tab=t.dataset.tab;save();render();window.scrollTo(0,0);break;
+    case 'addComida':formComida(null);break;
+    case 'editComida':formComida(id);break;
+    case 'addAparato':formAparato(null);break;
+    case 'apagon':
+      state.apagon=!state.apagon;save();render();
+      toast(state.apagon?'Modo apagón activado. Baja también el brillo del móvil: es lo que más batería ahorra.':'Modo apagón desactivado.');
+      break;
+    case 'addLista':formLista(null);break;
+    case 'editLista':formLista(id);break;
+    case 'delLista':{
+      const f=dlg.querySelector('form');
+      if(confirm('¿Eliminar este elemento?')){state.lista=state.lista.filter(x=>x.id!==f.dataset.id);save();closeDlg();render();}
+      break;}
+    case 'revHecha':state.ultimaRevision=isoHoy();save();if(dlg.open)closeDlg();render();toast('Revisión anotada.');break;
+    case 'revIcs':saveFile('kit72-revisiones.ics',buildRevIcs(($('#revStart')||{}).value),'text/calendar');break;
+    case 'editAparato':formAparato(id);break;
+    case 'settings':formAjustes();break;
+    case 'closeDlg':closeDlg();break;
+    case 'calc':{
+      const k=num($('#k100').value),g=num($('#gUd').value);
+      if(k>0&&g>0)dlg.querySelector('[name=kcalUd]').value=String(Math.round(k*g/100));
+      else toast('Rellena las kcal por 100 g y los gramos por unidad.');
+      break;}
+    case 'delComida':{
+      const f=dlg.querySelector('form');
+      if(confirm('¿Eliminar este alimento?')){state.comida=state.comida.filter(x=>x.id!==f.dataset.id);save();closeDlg();render();}
+      break;}
+    case 'delAparato':{
+      const f=dlg.querySelector('form');
+      if(confirm('¿Eliminar este aparato?')){state.aparatos=state.aparatos.filter(x=>x.id!==f.dataset.id);save();closeDlg();render();}
+      break;}
+    case 'step':{
+      const k=t.dataset.key;state.stock[k]=Math.max(0,(state.stock[k]||0)+Number(t.dataset.d));save();render();break;}
+    case 'exportFile':saveFile('kit72-copia.json',backupJson(),'application/json');break;
+    case 'exportText':
+      (navigator.clipboard?navigator.clipboard.writeText(backupJson()):Promise.reject()).then(()=>toast('Copia copiada. Pégala en una nota o en un mensaje.')).catch(()=>{
+        const ta=$('#impText');ta.value=backupJson();ta.select();toast('Selecciona el texto del cuadro y cópialo.');});
+      break;
+    case 'importText':importData($('#impText').value);break;
+    case 'ics':{
+      const r=buildIcs();
+      if(!r.n){toast('No hay alimentos con fecha de caducidad.');break;}
+      saveFile('kit72-caducidades.ics',r.text,'text/calendar');break;}
+    case 'wipe':
+      if(confirm('Se borrará todo lo que has guardado. ¿Seguro?')&&confirm('Última comprobación: ¿borrar todos los datos?')){
+        state=DEFAULTS();save();closeDlg();render();toast('Datos borrados.');}
+      break;
+  }
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.act==='tengoL'){
+    const a=state.lista.find(x=>x.id===t.dataset.id);if(a){a.tengo=t.checked;save();render();}
+  }else if(t.dataset&&t.dataset.act==='tengo'){
+    const a=state.aparatos.find(x=>x.id===t.dataset.id);if(a){a.tengo=t.checked;save();render();}
+  }else if(t.dataset&&t.dataset.act==='stock'){
+    state.stock[t.dataset.key]=Math.max(0,Math.floor(num(t.value)));save();render();
+  }else if(t.name==='tipo'||t.name==='energia'){toggleGroups();}
+  else if(t.id==='impFile'&&t.files&&t.files[0]){
+    t.files[0].text().then(importData).catch(()=>toast('No se pudo leer el archivo.'));
+  }
+});
+dlg.addEventListener('click',e=>{if(e.target===dlg)closeDlg();});
+dlg.addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=e.target,fd=new FormData(f),id=f.dataset.id;
+  if(f.id==='fComida'){
+    const tipo=fd.get('tipo');
+    const it={id:id||uid(),tipo,nombre:String(fd.get('nombre')).trim(),cantidad:num(fd.get('cantidad')),
+      kcalUd:tipo==='comida'?numOrNull(fd.get('kcalUd')):null,
+      litrosUd:tipo==='agua'?numOrNull(fd.get('litrosUd')):null,
+      caduca:String(fd.get('caduca')||'')};
+    const i=state.comida.findIndex(x=>x.id===it.id);
+    if(i>=0)state.comida[i]=it;else state.comida.push(it);
+  }else if(f.id==='fAparato'){
+    const en=fd.get('energia');
+    const a={id:id||uid(),nombre:String(fd.get('nombre')).trim(),cantidad:num(fd.get('cantidad')),energia:en,
+      precio:numOrNull(fd.get('precio')),tengo:fd.get('tengo')==='on'};
+    if(en==='pilas'){a.tipoPila=fd.get('tipoPila');a.pilasPorAparato=numOrNull(fd.get('pilasPorAparato'));a.horasJuego=numOrNull(fd.get('horasJuego'));}
+    if(en==='bateria'){a.horasBateria=numOrNull(fd.get('horasBateria'));a.mah=numOrNull(fd.get('mahBat'));}
+    if(en==='powerbank'){a.mah=numOrNull(fd.get('mahPb'));}
+    if(en==='gas'){a.minGas=numOrNull(fd.get('minGas'));}
+    const i=state.aparatos.findIndex(x=>x.id===a.id);
+    if(i>=0)state.aparatos[i]=a;else state.aparatos.push(a);
+  }else if(f.id==='fLista'){
+    const it={id:id||uid(),nombre:String(fd.get('nombre')).trim(),
+      caduca:String(fd.get('caduca')||''),tengo:fd.get('tengo')==='on'};
+    const i=state.lista.findIndex(x=>x.id===it.id);
+    if(i>=0)state.lista[i]=it;else state.lista.push(it);
+  }else if(f.id==='fSet'){
+    const s=state.settings;
+    s.personas=Math.max(1,Math.round(num(fd.get('personas'))||s.personas));
+    s.kcalDia=Math.max(500,num(fd.get('kcalDia'))||s.kcalDia);
+    s.litrosDia=Math.max(0.5,num(fd.get('litrosDia'))||s.litrosDia);
+    s.movilMah=Math.max(500,num(fd.get('movilMah'))||s.movilMah);
+    s.eficiencia=Math.min(100,Math.max(10,num(fd.get('eficiencia'))||s.eficiencia));
+    s.avisoDias=Math.max(1,Math.round(num(fd.get('avisoDias'))||s.avisoDias));
+    s.minCocinaDia=Math.max(1,num(fd.get('minCocinaDia'))||s.minCocinaDia);
+    s.cargasMovilDia=Math.max(0.1,num(fd.get('cargasMovilDia'))||s.cargasMovilDia);
+    s.revisionDias=Math.max(7,Math.round(num(fd.get('revisionDias'))||s.revisionDias));
+  }
+  save();closeDlg();render();
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.act==='search'){
+    q[state.tab]=t.value;
+    const w=$('#listWrap');
+    if(w)w.innerHTML=state.tab==='comida'?listComida():state.tab==='aparatos'?listAparatos():listLista();
+  }
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)render();});
+
+/* ---------- arranque ---------- */
+save();
+render();
+if(!storageOk)toast('Este navegador no deja guardar datos. Haz copias desde Ajustes.');
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
+}
+window.__kit72={get state(){return state;},buildIcs,buildRevIcs};
+})();
+</script>
+</body>
+</html>
